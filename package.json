@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "Scheduling.js",
   "description": "Utilities for scheduling (audio) events in a Web Audio API based app",
+  "keywords": [
+    "web audio"
+  ],
   "dependencies": {},
   "devDependencies": {
     "jasmine": "~2.3.1",
