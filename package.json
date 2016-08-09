@@ -8,11 +8,12 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "jasmine": "~2.3.1",
-    "babel-preset-es2015": "6.9.0"
+    "babel-preset-es2015": "6.9.0",
+    "eslint": "^2.8.0",
+    "jasmine": "~2.3.1"
   },
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine && ./node_modules/eslint/bin/eslint.js Scheduling.js"
   },
   "author": "https://github.com/crosslandwa",
   "license": "MIT",

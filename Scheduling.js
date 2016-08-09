@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const EventEmitter = require('events'),
     util = require('util');
@@ -7,7 +7,7 @@ function Repeater(inTheFuture, initialInterval) {
     EventEmitter.call(this);
 
     let createInterval = function(candidate) {
-        return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function() { return candidate }};
+        return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function() { return candidate; }};
     };
 
     let recursiveInTheFuture = function(callback) {
@@ -17,7 +17,7 @@ function Repeater(inTheFuture, initialInterval) {
                 _cancel = recursiveInTheFuture(callback);
             }
         }, _interval);
-    }
+    };
 
     let _isScheduling = false,
         _interval = createInterval(initialInterval),
@@ -28,24 +28,24 @@ function Repeater(inTheFuture, initialInterval) {
         _interval = createInterval(newInterval);
         repeater.reportInterval();
         return repeater;
-    }
+    };
 
     this.start = function(callback) {
         if (_isScheduling) return;
         _isScheduling = true;
         callback();
         _cancel = recursiveInTheFuture(callback);
-    }
+    };
 
     this.stop = function() {
         _isScheduling = false;
         _cancel();
         _cancel = noAction;
-    }
+    };
 
     this.reportInterval = function() {
         repeater.emit('interval', _interval);
-    }
+    };
 }
 util.inherits(Repeater, EventEmitter);
 
@@ -65,21 +65,21 @@ function Scheduling(context) {
         source.connect(context.destination);
         source.start(scheduled_at);
 
-        return function cancel() { localCallback = noAction; }
+        return function cancel() { localCallback = noAction; };
     };
 
     this.inTheFuture = context ? inTheFutureTight : inTheFutureLoose;
 
     this.Repeater = function(initialInterval) {
-        return new Repeater(scheduling.inTheFuture, initialInterval)
-    }
+        return new Repeater(scheduling.inTheFuture, initialInterval);
+    };
 }
 
 function inTheFutureLoose(callback, when) {
     let localCallback = callback;
-    setTimeout(() => { localCallback() }, when.toMs());
-    return function cancel() { localCallback = noAction; }
-};
+    setTimeout(() => { localCallback(); }, when.toMs());
+    return function cancel() { localCallback = noAction; };
+}
 
 function noAction() {}
 
