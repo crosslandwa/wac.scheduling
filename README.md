@@ -10,7 +10,7 @@ const context = new window.AudioContext(),
 //-----SCHEDULE AN EVENT-----
 // pass a callback to occur at some point in the future
 
-Scheduling.inTheFuture(() => { /* your callback */ }, when); // when must be an object that implements .toMs(), returning an integer time expressed in milliseconds
+Scheduling.inTheFuture(() => { /* your callback */ }, when); // when must be either a number, or an object that implements .toMs() and returns a time expressed in milliseconds
 
 //-----REPEATING EVENTS-----
 // have a callback called now, and repeatedly every X ms until told to stop

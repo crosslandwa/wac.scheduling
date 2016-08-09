@@ -1,6 +1,6 @@
 {
   "name": "wac.scheduling",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "Scheduling.js",
   "description": "Utilities for scheduling (audio) events in a Web Audio API based app",
   "keywords": [

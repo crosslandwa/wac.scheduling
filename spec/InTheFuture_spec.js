@@ -38,4 +38,14 @@ describe('InTheFuture', () => {
             done();
         }, 250);
     });
+
+    it('accepts a when time specified in ms', (done) => {
+        let count = 0;
+        Scheduling.inTheFuture(() => { count++ }, 100);
+        expect(count).toEqual(0);
+        setTimeout(function () {
+            expect(count).toEqual(1);
+            done();
+        }, 150);
+    });
 });

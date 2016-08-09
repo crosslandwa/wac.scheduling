@@ -6,10 +6,6 @@ const EventEmitter = require('events'),
 function Repeater(inTheFuture, initialInterval) {
     EventEmitter.call(this);
 
-    let createInterval = function(candidate) {
-        return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function() { return candidate; }};
-    };
-
     let recursiveInTheFuture = function(callback) {
         return inTheFuture(() => {
             if (_isScheduling) {
@@ -57,7 +53,7 @@ function Scheduling(context) {
             source = context.createBufferSource(),
             now = context.currentTime,
             thousandth = context.sampleRate / 1000,
-            scheduled_at = now + (when.toMs() / 1000) - 0.001;
+            scheduled_at = now + (createInterval(when).toMs() / 1000) - 0.001;
         // a buffer length of 1 sample doesn't work on IOS, so use 1/1000th of a second
         let buffer = context.createBuffer(1, thousandth, context.sampleRate);
         source.addEventListener('ended', () => { localCallback(); });
@@ -77,10 +73,14 @@ function Scheduling(context) {
 
 function inTheFutureLoose(callback, when) {
     let localCallback = callback;
-    setTimeout(() => { localCallback(); }, when.toMs());
+    setTimeout(() => { localCallback(); }, createInterval(when).toMs());
     return function cancel() { localCallback = noAction; };
 }
 
 function noAction() {}
+
+function createInterval(candidate) {
+    return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function() { return candidate; }};
+}
 
 module.exports = function(context) { return new Scheduling(context); };
