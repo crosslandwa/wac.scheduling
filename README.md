@@ -15,7 +15,7 @@ Scheduling.inTheFuture(() => { /* your callback */ }, when); // when must be an 
 //-----REPEATING EVENTS-----
 // have a callback called now, and repeatedly every X ms until told to stop
 
-var repeater = Scheduling.Repeater(initialInterval); // initialInterval must be an object that implements .toMs(), returning an integer time expressed in milliseconds
+var repeater = Scheduling.Repeater(interval); // interval must be an object that implements .toMs(), returning an integer time expressed in milliseconds
 
 repeater.start(myCallback); // calls myCallback immediately, then repeatedly until...
 repeater.stop(); // stops calling myCallback
@@ -23,6 +23,8 @@ repeater.updateInterval(interval) // fluid method to update the repeat time. int
 
 repeater.on('interval', (interval) => /* Take action when interval changes. interval will have a .toMs() method */);
 repeater.reportInterval(); // emits an 'interval' event
+
+// note that Repeater will handle being passed an integer interval and interpret it as a ms time 
 
 ```
 
@@ -39,7 +41,3 @@ LooseScheduling.inTheFuture(myCallback, 100); // will happen around 100ms from n
 TightScheduling.inTheFuture(myCallback, 100); // will happen exactly 100ms from now
 
 ```
-
-## TODO
-
-- Should repeater be instantiated with callback, and it be immutable? Will this solve the multi-invocations bug I have?
