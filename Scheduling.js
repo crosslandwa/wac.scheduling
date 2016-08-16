@@ -49,19 +49,21 @@ function Scheduling(context) {
     let scheduling = this;
 
     let inTheFutureTight = function(callback, when) {
-        let localCallback = callback,
-            source = context.createBufferSource(),
+        let source = context.createBufferSource(),
             now = context.currentTime,
             thousandth = context.sampleRate / 1000,
             scheduled_at = now + (createInterval(when).toMs() / 1000) - 0.001;
         // a buffer length of 1 sample doesn't work on IOS, so use 1/1000th of a second
         let buffer = context.createBuffer(1, thousandth, context.sampleRate);
-        source.addEventListener('ended', () => { localCallback(); });
+        source.addEventListener('ended', callback);
         source.buffer = buffer;
         source.connect(context.destination);
         source.start(scheduled_at);
 
-        return function cancel() { localCallback = noAction; };
+        return function cancel() {
+            source.removeEventListener('ended', callback);
+            source.stop();
+        };
     };
 
     this.inTheFuture = context ? inTheFutureTight : inTheFutureLoose;
@@ -72,9 +74,8 @@ function Scheduling(context) {
 }
 
 function inTheFutureLoose(callback, when) {
-    let localCallback = callback;
-    setTimeout(() => { localCallback(); }, createInterval(when).toMs());
-    return function cancel() { localCallback = noAction; };
+    let timer = setTimeout(callback, createInterval(when).toMs());
+    return function cancel() { clearTimeout(timer); };
 }
 
 function noAction() {}
