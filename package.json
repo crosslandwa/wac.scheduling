@@ -4,7 +4,8 @@
   "main": "Scheduling.js",
   "description": "Utilities for scheduling (audio) events in a Web Audio API based app",
   "keywords": [
-    "web audio"
+    "web audio",
+    "timing"
   ],
   "dependencies": {},
   "devDependencies": {
