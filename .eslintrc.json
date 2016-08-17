@@ -1,29 +1,17 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es6": true
-    },
-    "extends": "eslint:recommended",
+    "plugins": [ "jasmine" ],
     "parserOptions": {
+        "ecmaVersion": 6,
         "sourceType": "module"
     },
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ]
-    }
+        "jasmine/no-focused-tests": "error",
+        "jasmine/missing-expect": "warn"
+    },
+    "env": {
+        "es6": true,
+        "node": true,
+        "jasmine": true
+    },
+    "extends": "standard"
 }

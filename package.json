@@ -1,6 +1,6 @@
 {
   "name": "wac.scheduling",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "Scheduling.js",
   "description": "Utilities for scheduling (audio) events in a Web Audio API based app",
   "keywords": [
@@ -11,10 +11,14 @@
   "devDependencies": {
     "babel-preset-es2015": "6.9.0",
     "eslint": "^2.8.0",
+    "eslint-config-standard": "^5.3.1",
+    "eslint-plugin-jasmine": "^1.8.1",
+    "eslint-plugin-promise": "^1.3.2",
     "jasmine": "~2.3.1"
   },
   "scripts": {
-    "test": "jasmine && ./node_modules/eslint/bin/eslint.js Scheduling.js"
+    "lint": "./node_modules/eslint/bin/eslint.js Scheduling.js src/**/*.js spec/**/*.js",
+    "test": "jasmine && npm run-script lint"
   },
   "author": "https://github.com/crosslandwa",
   "license": "MIT",
