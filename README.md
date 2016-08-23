@@ -9,7 +9,7 @@ const context = new window.AudioContext(),
 
 //-----SCHEDULE AN EVENT RELATIVE TO NOW-----
 // pass a callback to occur at some point relative in the future
-let when = 3000 // occur 3s from now
+let when = { toMs: function() { return 3000 } }; // occur 3s from now
 Scheduling.inTheFuture(() => { /* your callback */ }, when); // when must be either a number, or an object that implements .toMs() and returns a time expressed in milliseconds
 
 //-----WHEN IS NOW?-----
