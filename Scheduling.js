@@ -110,7 +110,7 @@ function inTheFutureLoose (callback, when) {
 }
 
 function atATimeLoose (callback, when) {
-  let timer = setTimeout(callback, createInterval(when).toMs() - nowFromSystem())
+  let timer = setTimeout(callback, createInterval(when).toMs() - nowMsFromSystem())
   return function cancel () { clearTimeout(timer) }
 }
 

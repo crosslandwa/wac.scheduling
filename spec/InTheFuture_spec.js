@@ -1,7 +1,7 @@
 'use strict'
 const Scheduling = require('../Scheduling.js')()
 
-describe('InTheFuture', () => {
+describe('inTheFuture', () => {
   let when100ms = {toMs: function () { return 100 }}
 
   it('calls the passed callback at the specified time', (done) => {
