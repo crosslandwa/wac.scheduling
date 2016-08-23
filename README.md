@@ -7,10 +7,21 @@ Utilities for scheduling events in web audio API based applications
 const context = new window.AudioContext(),
     Scheduling = require('wac.scheduling')(context);
 
-//-----SCHEDULE AN EVENT-----
-// pass a callback to occur at some point in the future
-
+//-----SCHEDULE AN EVENT RELATIVE TO NOW-----
+// pass a callback to occur at some point relative in the future
+let when = 3000 // occur 3s from now
 Scheduling.inTheFuture(() => { /* your callback */ }, when); // when must be either a number, or an object that implements .toMs() and returns a time expressed in milliseconds
+
+//-----WHEN IS NOW?-----
+// get the current time in milliseconds
+
+Scheduling.nowMs();
+
+//-----SCHEDULE AN EVENT AT AN ABSOLUTE TIME-----
+// pass a callback to occur at some exact point in time
+
+let when = Scheduling.nowMs() + 2000; // schedule 2s from now 
+Scheduling.atATime(() => { /* your callback */ }, when); // when must be either a number, or an object that implements .toMs() and returns a time expressed in milliseconds
 
 //-----REPEATING EVENTS-----
 // have a callback called now, and repeatedly every X ms until told to stop
@@ -42,8 +53,16 @@ TightScheduling.inTheFuture(myCallback, 100); // will happen exactly 100ms from 
 
 ```
 
-TODO
-- test for atATime (are the names correct?)
-- API documentation
-- update sequence repeat functionality to use atATime instead of inTheFuture
-- publish 1.3.0 and update example app branch to use it
+## Relative or absolute?
+
+_inTheFuture_ and _atATime_ offer very similar functionality
+
+_inTheFuture_ is easier to use as the client does not need to know the current time
+
+_atATime_ requires the client to know the current time (discoverable via _nowMs()_)
+
+_inTheFuture_ will generally be slightly less accurate as system processing time could cause your callback to not actually be scheduled until *slightly after* the call to _inTheFuture_ is actually made
+
+e.g. internally the Repeater object makes use of _atATime_ to repeatedly schedule a callback without incurring variation in when the repetition actually occurs
+
+When absoliute precision matters use _atATime_, else make life easy for yourself and use _inTheFuture_
