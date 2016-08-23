@@ -41,3 +41,9 @@ LooseScheduling.inTheFuture(myCallback, 100); // will happen around 100ms from n
 TightScheduling.inTheFuture(myCallback, 100); // will happen exactly 100ms from now
 
 ```
+
+TODO
+- test for atATime (are the names correct?)
+- API documentation
+- update sequence repeat functionality to use atATime instead of inTheFuture
+- publish 1.3.0 and update example app branch to use it

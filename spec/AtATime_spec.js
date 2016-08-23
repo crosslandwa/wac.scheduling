@@ -54,4 +54,14 @@ describe('atATime', () => {
       done()
     }, 250)
   })
+
+  it('schedules callbacks that are specified as in the past now', (done) => {
+    let count = 0
+    Scheduling.atATime(() => { count++ }, 200) // 'now' would be the current number of ms since 01/01/1970
+    expect(count).toEqual(0)
+    setTimeout(function () {
+      expect(count).toEqual(1)
+      done()
+    }, 50)
+  })
 })
