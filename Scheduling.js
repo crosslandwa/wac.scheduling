@@ -3,6 +3,7 @@
 const EventEmitter = require('events')
 const util = require('util')
 const Sequence = require('./src/Sequence.js')
+const Metronome = require('./src/Metronome.js')
 
 function Repeater (atATime, nowMs, initialInterval) {
   EventEmitter.call(this)
@@ -50,45 +51,6 @@ function Repeater (atATime, nowMs, initialInterval) {
   }
 }
 util.inherits(Repeater, EventEmitter)
-
-function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
-  EventEmitter.call(this)
-  let metronome = this
-  let numberOfBeats = initialNumberOfBeats
-  let repeater = Repeater(bpmToMs(initialBPM))
-  let count = -1
-
-  function tick () {
-    count = ++count % numberOfBeats
-    if (count === 0) {
-      metronome.emit('accent')
-    } else {
-      metronome.emit('tick')
-    }
-  }
-
-  this.start = function () {
-    repeater.start(tick)
-  }
-
-  this.stop = function () {
-    repeater.stop()
-    count = -1
-  }
-
-  this.updateNumberOfBeats = function (beats) {
-    if ((beats > 0) && (beats <= 16)) {
-      numberOfBeats = beats
-    }
-  }
-
-  this.updateBPM = function (newBPM) {
-    if ((newBPM >= 20) && (newBPM <= 300)) {
-      repeater.updateInterval(bpmToMs(newBPM))
-    }
-  }
-}
-util.inherits(Metronome, EventEmitter)
 
 function Scheduling (context) {
   let scheduling = this
@@ -172,10 +134,6 @@ function noAction () {}
 
 function createInterval (candidate) {
   return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function () { return candidate } }
-}
-
-function bpmToMs (bpm) {
-  return 60 / bpm * 1000
 }
 
 module.exports = function (context) { return new Scheduling(context) }
