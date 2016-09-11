@@ -45,4 +45,25 @@ describe('Metronome', () => {
       done()
     }, 1300)
   })
+
+  it('can have number of beats changed', (done) => {
+    let events = []
+    capture(events, 'accent')
+    capture(events, 'tick')
+
+    setTimeout(() => metronome.updateNumberOfBeats(6), 900)
+
+    metronome.start()
+    setTimeout(() => {
+      expect(events.length).toEqual(7)
+      expectEventAtTime(events[0], 'accent', 0)
+      expectEventAtTime(events[1], 'tick', 250)
+      expectEventAtTime(events[2], 'tick', 500)
+      expectEventAtTime(events[3], 'tick', 750)
+      expectEventAtTime(events[4], 'tick', 1000)
+      expectEventAtTime(events[5], 'tick', 1250)
+      expectEventAtTime(events[6], 'accent', 1500)
+      done()
+    }, 1600)
+  })
 })

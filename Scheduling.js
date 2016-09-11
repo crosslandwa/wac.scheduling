@@ -51,20 +51,31 @@ function Repeater (atATime, nowMs, initialInterval) {
 }
 util.inherits(Repeater, EventEmitter)
 
-function Metronome (sequence, initialNumberOfBeats, initialBPM) {
+function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
   EventEmitter.call(this)
   let metronome = this
   let numberOfBeats = initialNumberOfBeats
   let bpm = initialBPM
-  sequence.addEventAt(0, 'accent', {})
-  for (let i = 1; i < 16; i++) sequence.addEventAt(i, 'tick', {})
-  sequence.on('accent', () => metronome.emit('accent'))
-  sequence.on('tick', () => metronome.emit('tick'))
-  sequence.loop(numberOfBeats)
-  sequence.scale(60000 / bpm) // 1 beat = 1ms -> 1000 beats per second = 60000 beats per min
+  let repeater = Repeater(bpmToMs(bpm))
+  let count = -1
+
+  function tick () {
+    count = ++count % numberOfBeats
+    if (count === 0) {
+      metronome.emit('accent')
+    } else {
+      metronome.emit('tick')
+    }
+  }
 
   this.start = function () {
-    sequence.start()
+    repeater.start(tick)
+  }
+
+  this.updateNumberOfBeats = function (beats) {
+    if ((beats > 0) && (beats <= 16)) {
+      numberOfBeats = beats
+    }
   }
 }
 util.inherits(Metronome, EventEmitter)
@@ -129,7 +140,7 @@ function Scheduling (context) {
   this.Metronome = function (numberOfBeats, bpm) {
     numberOfBeats = (numberOfBeats > 0) && (numberOfBeats <= 16) ? numberOfBeats : 4
     bpm = (bpm >= 20) && (bpm <= 300) ? bpm : 120
-    return new Metronome(scheduling.Sequence(), numberOfBeats, bpm)
+    return new Metronome(scheduling.Repeater, numberOfBeats, bpm)
   }
 }
 
@@ -151,6 +162,10 @@ function noAction () {}
 
 function createInterval (candidate) {
   return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function () { return candidate } }
+}
+
+function bpmToMs (bpm) {
+  return 60 / bpm * 1000
 }
 
 module.exports = function (context) { return new Scheduling(context) }
