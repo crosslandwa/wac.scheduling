@@ -69,7 +69,7 @@ When absolute precision matters use _atATime_, else make life easy for yourself 
 
 # Sequence API
 
-The sequence object provided by wac.scheduling provides the ability to schedule a series of events
+The sequence object provides the ability to schedule a (looping) series of events
 
 ```javascript
 const context = new window.AudioContext(),
@@ -121,7 +121,6 @@ sequence.addEventNow(name, data) // adds the event at current position within th
 - add tests/define behaviour around load() method of Sequence when its playing (probably can't load if playing...)
   - what about a merge events from another sequence functionality?
 - test toJSON/load for unlooped sequence
-- Change sequence length whilst running (no in app need yet, but would be good for completeness)
 - consider the storing the whens in the sequence events as a fraction of loop length rather than absolute ms time...
   - serialized version would be decoupled from BPM (i.e. could load sequence at a different BPM)
   - don't want to have to calculate ms every time event scheduled

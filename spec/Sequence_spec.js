@@ -253,7 +253,7 @@ describe('Sequence', () => {
       }, 150)
     })
 
-    it('has start position wrapped when started after the loop end', (done) => {
+    it('starts within the loop when started with an offset that is after the loop end', (done) => {
       let events = []
       capture(events, 'capture')
 
@@ -269,6 +269,31 @@ describe('Sequence', () => {
         expectEventAtTime(events[1], 'capture', 75, 'hello2')
         done()
       }, 100)
+    })
+
+    it('responds to changes in loop length whilst playing', (done) => {
+      let events = []
+      capture(events, 'capture')
+
+      sequence.addEventAt(50, 'capture', 'hello1')
+      sequence.addEventAt(100, 'capture', 'hello2')
+      sequence.addEventAt(150, 'capture', 'hello3')
+      sequence.loop(200).start()
+
+      setTimeout(() => sequence.loop(125), 385) // current position should be 185, so expect it to go to 60
+
+      setTimeout(() => {
+        expect(events.length).toEqual(8)
+        expectEventAtTime(events[0], 'capture', 50, 'hello1')
+        expectEventAtTime(events[1], 'capture', 100, 'hello2')
+        expectEventAtTime(events[2], 'capture', 150, 'hello3')
+        expectEventAtTime(events[3], 'capture', 250, 'hello1')
+        expectEventAtTime(events[4], 'capture', 300, 'hello2')
+        expectEventAtTime(events[5], 'capture', 350, 'hello3')
+        expectEventAtTime(events[6], 'capture', 415, 'hello2') // 375 + (100 - 60)
+        expectEventAtTime(events[7], 'capture', 490, 'hello1') // 375 + (125 - 60) + 50
+        done()
+      }, 510)
     })
 
     it('fires events until stopped', (done) => {

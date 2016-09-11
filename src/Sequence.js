@@ -86,6 +86,10 @@ function Sequence (atATime, nowMs) {
     let end = endTimeMs > 0 ? endTimeMs : undefined
     if (end) {
       restartEvent.when = end
+      if (running) {
+        let offsetMs = sequence.currentPositionMs() % end
+        sequence.start(offsetMs)
+      }
     }
     return sequence
   }
