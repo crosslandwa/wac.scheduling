@@ -51,9 +51,9 @@ describe('Metronome', () => {
     capture(events, 'accent')
     capture(events, 'tick')
 
+    metronome.start()
     setTimeout(() => metronome.updateNumberOfBeats(6), 900)
 
-    metronome.start()
     setTimeout(() => {
       expect(events.length).toEqual(7)
       expectEventAtTime(events[0], 'accent', 0)
@@ -65,5 +65,23 @@ describe('Metronome', () => {
       expectEventAtTime(events[6], 'accent', 1500)
       done()
     }, 1600)
+  })
+
+  it('can be stopped and started', (done) => {
+    let events = []
+    capture(events, 'accent')
+    capture(events, 'tick')
+
+    metronome.start()
+    setTimeout(() => metronome.stop(), 200)
+    setTimeout(() => metronome.start(), 300)
+
+    setTimeout(() => {
+      expect(events.length).toEqual(3)
+      expectEventAtTime(events[0], 'accent', 0)
+      expectEventAtTime(events[1], 'accent', 300)
+      expectEventAtTime(events[2], 'tick', 550)
+      done()
+    }, 600)
   })
 })

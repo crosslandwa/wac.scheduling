@@ -72,6 +72,11 @@ function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
     repeater.start(tick)
   }
 
+  this.stop = function () {
+    repeater.stop()
+    count = -1
+  }
+
   this.updateNumberOfBeats = function (beats) {
     if ((beats > 0) && (beats <= 16)) {
       numberOfBeats = beats
