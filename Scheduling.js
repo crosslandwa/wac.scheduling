@@ -55,8 +55,7 @@ function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
   EventEmitter.call(this)
   let metronome = this
   let numberOfBeats = initialNumberOfBeats
-  let bpm = initialBPM
-  let repeater = Repeater(bpmToMs(bpm))
+  let repeater = Repeater(bpmToMs(initialBPM))
   let count = -1
 
   function tick () {
@@ -80,6 +79,12 @@ function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
   this.updateNumberOfBeats = function (beats) {
     if ((beats > 0) && (beats <= 16)) {
       numberOfBeats = beats
+    }
+  }
+
+  this.updateBPM = function (newBPM) {
+    if ((newBPM >= 20) && (newBPM <= 300)) {
+      repeater.updateInterval(bpmToMs(newBPM))
     }
   }
 }

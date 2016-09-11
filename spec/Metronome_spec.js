@@ -67,6 +67,24 @@ describe('Metronome', () => {
     }, 1600)
   })
 
+  it('can have bpm changed', (done) => {
+    let events = []
+    capture(events, 'accent')
+    capture(events, 'tick')
+
+    metronome.start()
+    setTimeout(() => metronome.updateBPM(120), 275)
+
+    setTimeout(() => {
+      expect(events.length).toEqual(4)
+      expectEventAtTime(events[0], 'accent', 0)
+      expectEventAtTime(events[1], 'tick', 250)
+      expectEventAtTime(events[2], 'tick', 500) // next tick occurs when it would have
+      expectEventAtTime(events[3], 'tick', 1000) // subsequent ticks re-timed
+      done()
+    }, 1300)
+  })
+
   it('can be stopped and started', (done) => {
     let events = []
     capture(events, 'accent')
