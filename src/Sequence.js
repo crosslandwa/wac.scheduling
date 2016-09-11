@@ -23,8 +23,9 @@ function Sequence (atATime, nowMs) {
     schedule(restartEvent.when ? restartEvent : stopEvent)
   }
 
-  let restart = function () {
+  function restart () {
     absoluteStartTime += restartEvent.when
+    sequence.emit('loop')
     scheduleAllEvents(0)
   }
 

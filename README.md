@@ -79,6 +79,7 @@ let sequence = Scheduling.Sequence(Scheduling);
 
 sequence.on(eventName, (eventData) => /* do stuff */);
 sequence.on('stopped', (eventData) => /* sequence stopped actions */);
+sequence.on('loop', (eventData) => /* take action when sequence starts each loop */);
 
 sequence.addEventAt(whenMs, eventName, eventData); // whenMs specifies how far into the sequence the given eventName/eventData will be emitted
 sequence.addEventNow(eventName, eventData); // adds an event at the current point in the (playing) sequence
@@ -119,7 +120,6 @@ sequence.addEventNow(name, data) // adds the event at current position within th
 
 - add tests/define behaviour around load() method of Sequence when its playing (probably can't load if playing...)
   - what about a merge events from another sequence functionality?
-- emit a 'restart' event?
 - test toJSON/load for unlooped sequence
 - Change sequence length whilst running (no in app need yet, but would be good for completeness)
 - consider the storing the whens in the sequence events as a fraction of loop length rather than absolute ms time...

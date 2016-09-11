@@ -197,6 +197,7 @@ describe('Sequence', () => {
     it('can repeatedly fire scheduled events', (done) => {
       let events = []
       capture(events, 'capture')
+      capture(events, 'loop')
 
       sequence.addEventAt(50, 'capture', 'hello1')
       sequence.addEventAt(100, 'capture', 'hello2')
@@ -204,13 +205,14 @@ describe('Sequence', () => {
       sequence.start()
 
       setTimeout(() => {
-        expect(events.length).toEqual(4)
+        expect(events.length).toEqual(5)
         expectEventAtTime(events[0], 'capture', 50, 'hello1')
         expectEventAtTime(events[1], 'capture', 100, 'hello2')
-        expectEventAtTime(events[2], 'capture', 200, 'hello1')
-        expectEventAtTime(events[3], 'capture', 250, 'hello2')
+        expectEventAtTime(events[2], 'loop', 150)
+        expectEventAtTime(events[3], 'capture', 200, 'hello1')
+        expectEventAtTime(events[4], 'capture', 250, 'hello2')
         done()
-      }, 300)
+      }, 275)
     })
 
     it('can have events added whilst running', (done) => {
