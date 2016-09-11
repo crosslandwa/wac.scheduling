@@ -37,6 +37,19 @@ repeater.reportInterval(); // emits an 'interval' event
 
 // note that Repeater will handle being passed an integer interval and interpret it as a ms time 
 
+// -----METRONOME-----
+// a simple metronome
+
+var metronome = Scheduling.Metronome(numberOfBeats, bpm) // specifiy an accent every 1-16 beats, and a BPM
+
+// metronome emits an event (either 'accent' or 'tick') every beat
+
+metronome.on('accent', () => { /* occurs every Nth beat as specifided by numberOfBeats */ }
+metronome.start() // start emitting events
+metronome.stop() // stop emitting events
+
+metronome.updateBPM(newBPM) // change how often events are emitted
+metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
 ```
 
 ## Tight or loose?
