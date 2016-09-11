@@ -50,6 +50,8 @@ metronome.stop() // stop emitting events
 
 metronome.updateBPM(newBPM) // change how often events are emitted
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
+
+metronome.suppressClick() // prevents the metronome's default click sounds from sounding
 ```
 
 ## Tight or loose?

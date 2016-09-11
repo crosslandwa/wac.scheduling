@@ -112,7 +112,7 @@ function Scheduling (context) {
   this.Metronome = function (numberOfBeats, bpm) {
     numberOfBeats = (numberOfBeats > 0) && (numberOfBeats <= 16) ? numberOfBeats : 4
     bpm = (bpm >= 20) && (bpm <= 300) ? bpm : 120
-    return new Metronome(scheduling.Repeater, numberOfBeats, bpm)
+    return new Metronome(scheduling.Repeater, context, numberOfBeats, bpm)
   }
 }
 
