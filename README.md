@@ -41,7 +41,7 @@ repeater.reportInterval(); // emits an 'interval' event
 
 ## Tight or loose?
 
-wac.scheduling is designed to be used both with and without an audio context. Without an audio context, timing utilises the native setTimeout method, and can be sloppy. When provided an audio context, events are scheduled using the Web Audio API and should have more predictable and tighter timing
+wac.scheduling is designed to be used both with and without an audio context. Without an audio context, timing utilises the native setTimeout method, and can be sloppy. When provided an audio context, events are scheduled using the Web Audio API and should have more predictable/tighter timing
 
 ```javascript
 const context = new window.AudioContext(),
@@ -61,8 +61,68 @@ _inTheFuture_ is easier to use as the client does not need to know the current t
 
 _atATime_ requires the client to know the current time (discoverable via _nowMs()_)
 
-_inTheFuture_ will generally be slightly less accurate as system processing time could cause your callback to not actually be scheduled until *slightly after* the call to _inTheFuture_ is actually made
+_inTheFuture_ will generally be slightly less accurate as system processing time could cause your callback to not actually be scheduled until *slightly after* the call to _inTheFuture_ is made
 
 e.g. internally the Repeater object makes use of _atATime_ to repeatedly schedule a callback without incurring variation in when the repetition actually occurs
 
-When absoliute precision matters use _atATime_, else make life easy for yourself and use _inTheFuture_
+When absolute precision matters use _atATime_, else make life easy for yourself and use _inTheFuture_
+
+# Sequence API
+
+The sequence object provided by wac.scheduling provides the ability to schedule a series of events
+
+```javascript
+const context = new window.AudioContext(),
+    Scheduling = require('wac.scheduling')(context);
+    
+let sequence = Scheduling.Sequence(Scheduling);
+
+sequence.on(eventName, (eventData) => /* do stuff */);
+sequence.on('stopped', (eventData) => /* sequence stopped actions */);
+
+sequence.addEventAt(whenMs, eventName, eventData); // whenMs specifies how far into the sequence the given eventName/eventData will be emitted
+sequence.addEventNow(eventName, eventData); // adds an event at the current point in the (playing) sequence
+sequence.loop(loopLengthMs); // optional, sets a loop length and sequence will repeat until stopped
+sequence.start([offsetMs]); // starts emitting events [starting from a given offset if provided]
+sequence.stop(); // stops sequence, emits stopped event
+
+sequence.reset(); // clears all events and loop length
+
+sequence.toJSON(); // returns a JSON representation of the sequence (that can be JSON stringified for storage)
+sequence.load(json); // stops the sequence (if running) and loads new events/loops specified in json
+
+sequence.scale(scaleFactor); // makes the events in the sequence and its loop length (if looping) longer/shorter 
+
+sequence.currentPositionMs(); // returns current position within loop in ms
+sequence.loopLengthMs(); // returns the loop length in ms (or undefined if the sequence is not looped)
+```
+
+## Add event now
+
+The addEventNow method has some slightly special behaviour
+
+```javascript    
+let sequence = Scheduling.Sequence(Scheduling);
+
+// sequence that is not running
+
+sequence.addEventNow(name, data) // first call adds an event at time 0ms and starts the internal timer running
+setTimeout(() => sequence.addEventNow(name, data), 50) // subsequent calls add event at the time called, relative to ths sequence start time (i.e. 50ms in this case)
+
+// sequence that is running
+sequence.start()
+sequence.addEventNow(name, data) // adds the event at current position within the sequence
+
+```
+
+## TODO
+
+- add tests/define behaviour around load() method of Sequence when its playing (probably can't load if playing...)
+  - what about a merge events from another sequence functionality?
+- emit a 'restart' event?
+- test toJSON/load for unlooped sequence
+- Change sequence length whilst running (no in app need yet, but would be good for completeness)
+- consider the storing the whens in the sequence events as a fraction of loop length rather than absolute ms time...
+  - serialized version would be decoupled from BPM (i.e. could load sequence at a different BPM)
+  - don't want to have to calculate ms every time event scheduled
+  - consider internally storing bpm time + ms time but only serialize the fractional amount

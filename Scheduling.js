@@ -2,6 +2,7 @@
 
 const EventEmitter = require('events')
 const util = require('util')
+const Sequence = require('./src/Sequence.js')
 
 function Repeater (atATime, nowMs, initialInterval) {
   EventEmitter.call(this)
@@ -101,6 +102,10 @@ function Scheduling (context) {
 
   this.Repeater = function (initialInterval) {
     return new Repeater(scheduling.atATime, scheduling.nowMs, initialInterval)
+  }
+
+  this.Sequence = function () {
+    return new Sequence(scheduling.atATime, scheduling.nowMs)
   }
 }
 
