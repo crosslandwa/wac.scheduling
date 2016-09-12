@@ -52,6 +52,38 @@ function Repeater (atATime, nowMs, initialInterval) {
 }
 util.inherits(Repeater, EventEmitter)
 
+function Tap (nowMs, inTheFuture) {
+  EventEmitter.call(this)
+  let firstTapped
+  let lastTapped
+  let count = -1
+  let tap = this
+  let cancel = noAction
+
+  function reset () {
+    count = -1
+    lastTapped = undefined
+  }
+
+  this.again = function () {
+    cancel()
+    cancel = noAction
+    count++
+    if (count === 0) {
+      firstTapped = nowMs()
+    } else {
+      lastTapped = nowMs()
+    }
+    if (lastTapped) {
+      tap.emit('average', {
+        toMs: function () { return (lastTapped - firstTapped) / count }
+      })
+      cancel = inTheFuture(reset, 2.5 * ((lastTapped - firstTapped) / count))
+    }
+  }
+}
+util.inherits(Tap, EventEmitter)
+
 function Scheduling (context) {
   let scheduling = this
 
@@ -114,6 +146,8 @@ function Scheduling (context) {
     bpm = (bpm >= 20) && (bpm <= 300) ? bpm : 120
     return new Metronome(scheduling.Repeater, context, numberOfBeats, bpm)
   }
+
+  this.Tap = function () { return new Tap(scheduling.nowMs, scheduling.inTheFuture) }
 }
 
 function inTheFutureLoose (callback, when) {

@@ -40,7 +40,7 @@ repeater.reportInterval(); // emits an 'interval' event
 // -----METRONOME-----
 // a simple metronome
 
-var metronome = Scheduling.Metronome(numberOfBeats, bpm) // specifiy an accent every 1-16 beats, and a BPM
+var metronome = Scheduling.Metronome(numberOfBeats, bpm) // specify an accent every 1-16 beats, and a BPM
 
 // metronome emits an event (either 'accent' or 'tick') every beat
 
@@ -52,6 +52,16 @@ metronome.updateBPM(newBPM) // change how often events are emitted
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
 
 metronome.suppressClick() // prevents the metronome's default click sounds from sounding
+
+// -----TAP-----
+// a simple tap tempo type utility
+
+var tap = Scheduling.Tap();
+tap.again() // call this repeatedly/periodically and tap will emit 'average' events
+tap.on('average', (result) => { /* do something with result.toMs() */ }) // result.toMs() gives the average time between calls to tap.again()
+
+// the tap object will reset itself if tap.again() is not called for a period of time
+
 ```
 
 ## Tight or loose?
@@ -133,7 +143,6 @@ sequence.addEventNow(name, data) // adds the event at current position within th
 
 ## TODO
 
-- tap tempo
 - add tests/define behaviour around load() method of Sequence when its playing (probably can't load if playing...)
   - what about a merge events from another sequence functionality?
 - consider the storing the whens in the sequence events as a fraction of loop length rather than absolute ms time...
