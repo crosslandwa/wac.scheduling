@@ -133,9 +133,9 @@ sequence.addEventNow(name, data) // adds the event at current position within th
 
 ## TODO
 
+- tap tempo
 - add tests/define behaviour around load() method of Sequence when its playing (probably can't load if playing...)
   - what about a merge events from another sequence functionality?
-- test toJSON/load for unlooped sequence
 - consider the storing the whens in the sequence events as a fraction of loop length rather than absolute ms time...
   - serialized version would be decoupled from BPM (i.e. could load sequence at a different BPM)
   - don't want to have to calculate ms every time event scheduled

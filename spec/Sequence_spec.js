@@ -161,6 +161,28 @@ describe('Sequence', () => {
         done()
       }, 180)
     })
+
+    it('can be serialized to and loaded from JSON', (done) => {
+      let events = []
+      capture(events, 'capture')
+      capture(events, 'stopped')
+
+      let sequence2 = Scheduling.Sequence()
+
+      sequence2.addEventAt(50, 'capture', 'hello1')
+      sequence2.addEventAt(100, 'capture', 'hello2')
+
+      sequence.load(sequence2.toJSON())
+      sequence.start()
+
+      setTimeout(() => {
+        expect(events.length).toEqual(3)
+        expectEventAtTime(events[0], 'capture', 50, 'hello1')
+        expectEventAtTime(events[1], 'capture', 100, 'hello2')
+        expectEventAtTime(events[2], 'stopped', 100)
+        done()
+      }, 125)
+    })
   })
 
   describe("that hasn't been started", () => {
