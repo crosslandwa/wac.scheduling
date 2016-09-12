@@ -78,8 +78,10 @@ function Tap (nowMs, inTheFuture) {
       tap.emit('average', {
         toMs: function () { return (lastTapped - firstTapped) / count }
       })
-      cancel = inTheFuture(reset, 2.5 * ((lastTapped - firstTapped) / count))
     }
+
+    let cancelTime = lastTapped ? 2.5 * ((lastTapped - firstTapped) / count) : 2000
+    cancel = inTheFuture(reset, cancelTime)
   }
 }
 util.inherits(Tap, EventEmitter)
