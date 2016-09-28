@@ -69,6 +69,9 @@ var bpm = Scheduling.BPM(); // bpm defaults to 120 beats per min
 var bpm = Scheduling.BPM(150); // bpm at 150 beats per min
 var bpm = Scheduling.BPMForBeatLength(1000); // bpm with beats of length 1000ms (i.e. 60bpm)
 
+var bpm1 = Scheduling.BPM(150);
+var bpm2 = Scheduling.BPM(bpm1); // make a new BPM instance from another one (effectively a copy)
+
 bpm.on('changed', (bpm) => /* respond to changes in BPM */);
 
 bpm.changeTo(150); // change to 150 beats per min. Emits a 'changed' event

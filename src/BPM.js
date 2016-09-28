@@ -17,7 +17,7 @@ const toMs = (candidate) => (candidate && (typeof candidate.toMs === 'function')
 function BPM (initial) {
   EventEmitter.call(this)
   let bpm = this
-  let current = sanitize(initial)
+  let current = (typeof bpm.beatLength === 'function') ? initial.current() : sanitize(initial)
 
   function updateAndReport (newBpm) {
     current = sanitize(newBpm)
@@ -27,7 +27,7 @@ function BPM (initial) {
   this.current = () => current
   this.report = () => bpm.emit('changed', bpm)
   this.changeBy = (amount) => updateAndReport(sum([current, amount]))
-  this.changeTo = (amount) => updateAndReport(amount)
+  this.changeTo = (amount) => updateAndReport(new BPM(amount).current())
   this.beatLength = () => {
     return { toMs: () => { return bpmToBeatLengthMs(current) } }
   }

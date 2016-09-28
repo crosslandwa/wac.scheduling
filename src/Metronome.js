@@ -6,15 +6,13 @@ const util = require('util')
 const { clamp } = require('ramda')
 
 const between1And16 = clamp(1, 16)
-
-const forceToBPMObject = (bpm) => (typeof bpm.beatLength === 'function') ? bpm : new BPM(bpm)
+const bpmToMs = (bpm) => new BPM(bpm).beatLength().toMs()
 
 function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
   EventEmitter.call(this)
-  initialBPM = forceToBPMObject(initialBPM)
   let metronome = this
   let numberOfBeats = between1And16(initialNumberOfBeats)
-  let repeater = Repeater(initialBPM.beatLength().toMs())
+  let repeater = Repeater(bpmToMs(initialBPM))
   let count = -1
   let gain
 
@@ -70,7 +68,7 @@ function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
   }
 
   this.updateBPM = function (newBPM) {
-    repeater.updateInterval(forceToBPMObject(newBPM).beatLength().toMs())
+    repeater.updateInterval(bpmToMs(newBPM))
   }
 
   this.suppressClick = function () {
