@@ -8,7 +8,9 @@
     "timing",
     "sequencing"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "ramda": "^0.22.1 "
+  },
   "devDependencies": {
     "babel-preset-es2015": "6.9.0",
     "eslint": "^2.8.0",

@@ -1,5 +1,6 @@
 'use strict'
 
+const BPM = require('./src/BPM.js')
 const createInterval = require('./src/CreateInterval.js')
 const Metronome = require('./src/Metronome.js')
 const Repeater = require('./src/Repeater.js')
@@ -70,6 +71,9 @@ function Scheduling (context) {
   }
 
   this.Tap = function () { return new Tap(scheduling.nowMs, scheduling.inTheFuture) }
+
+  this.BPM = function (initial) { return new BPM(initial) }
+  this.BPMForBeatLength = function (beatLength) { return BPM.forBeatLength() }
 }
 
 function inTheFutureLoose (callback, when) {
