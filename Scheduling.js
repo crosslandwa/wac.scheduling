@@ -2,8 +2,9 @@
 
 const EventEmitter = require('events')
 const util = require('util')
-const Sequence = require('./src/Sequence.js')
 const Metronome = require('./src/Metronome.js')
+const Sequence = require('./src/Sequence.js')
+const Tap = require('./src/TapTempo.js')
 
 function Repeater (atATime, nowMs, initialInterval) {
   EventEmitter.call(this)
@@ -51,40 +52,6 @@ function Repeater (atATime, nowMs, initialInterval) {
   }
 }
 util.inherits(Repeater, EventEmitter)
-
-function Tap (nowMs, inTheFuture) {
-  EventEmitter.call(this)
-  let firstTapped
-  let lastTapped
-  let count = -1
-  let tap = this
-  let cancel = noAction
-
-  function reset () {
-    count = -1
-    lastTapped = undefined
-  }
-
-  this.again = function () {
-    cancel()
-    cancel = noAction
-    count++
-    if (count === 0) {
-      firstTapped = nowMs()
-    } else {
-      lastTapped = nowMs()
-    }
-    if (lastTapped) {
-      tap.emit('average', {
-        toMs: function () { return (lastTapped - firstTapped) / count }
-      })
-    }
-
-    let cancelTime = lastTapped ? 2.5 * ((lastTapped - firstTapped) / count) : 2000
-    cancel = inTheFuture(reset, cancelTime)
-  }
-}
-util.inherits(Tap, EventEmitter)
 
 function Scheduling (context) {
   let scheduling = this

@@ -1,7 +1,7 @@
 'use strict'
 const Scheduling = require('../Scheduling.js')()
 
-describe('Tap', () => {
+fdescribe('Tap', () => {
   it('tells the average time between taps', (done) => {
     let startTime = Scheduling.nowMs()
     let events = []
