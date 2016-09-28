@@ -1,7 +1,7 @@
 'use strict'
 const Scheduling = require('../Scheduling.js')()
 
-fdescribe('Tap', () => {
+describe('Tap', () => {
   it('tells the average time between taps', (done) => {
     let startTime = Scheduling.nowMs()
     let events = []
@@ -11,13 +11,13 @@ fdescribe('Tap', () => {
     })
 
     tap.again()
-    setTimeout(tap.again, 100)
-    setTimeout(tap.again, 250)
+    setTimeout(tap.again, 80)
+    setTimeout(tap.again, 120)
 
     setTimeout(() => {
       expect(events.length).toEqual(2)
-      expectAverageAtTime(events[0], 100, 100)
-      expectAverageAtTime(events[1], 125, 250)
+      expectAverageAtTime(events[0], 80, 80)
+      expectAverageAtTime(events[1], 60, 120)
       done()
     }, 250)
   })
