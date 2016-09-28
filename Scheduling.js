@@ -9,7 +9,7 @@ const Tap = require('./src/TapTempo.js')
 function Scheduling (context) {
   let scheduling = this
 
-  let inTheFutureTight = function (callback, when) {
+  function inTheFutureTight (callback, when) {
     let source = context.createBufferSource()
     let now = context.currentTime
     let thousandth = context.sampleRate / 1000
@@ -27,7 +27,7 @@ function Scheduling (context) {
     }
   }
 
-  let atATimeTight = function (callback, when) {
+  function atATimeTight (callback, when) {
     let source = context.createBufferSource()
     let thousandth = context.sampleRate / 1000
     let scheduledAt = (createInterval(when).toMs() / 1000) - 0.001
@@ -45,7 +45,7 @@ function Scheduling (context) {
     }
   }
 
-  let nowMsFromContext = function () {
+  function nowMsFromContext () {
     return context.currentTime * 1000
   }
 
