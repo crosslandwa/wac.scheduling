@@ -70,7 +70,6 @@ function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
   }
 
   this.updateBPM = function (newBPM) {
-    console.log(newBPM, forceToBPMObject(newBPM))
     repeater.updateInterval(forceToBPMObject(newBPM).beatLength().toMs())
   }
 

@@ -58,7 +58,7 @@ metronome.suppressClick() // prevents the metronome's default click sounds from 
 
 var tap = Scheduling.Tap();
 tap.again() // call this repeatedly/periodically and tap will emit 'average' events
-tap.on('average', (result) => { /* do something with result.toMs() */ }) // result.toMs() gives the average time between calls to tap.again()
+tap.on('average', (bpm) => { /* do something with BPM instance */ }) // bpm is a BPM instance describing the average time between calls to tap.again()
 
 // the tap object will reset itself if tap.again() is not called for a period of time
 

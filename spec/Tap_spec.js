@@ -7,19 +7,19 @@ describe('Tap', () => {
     let events = []
     let tap = Scheduling.Tap()
     tap.on('average', (result) => {
-      events.push([result.toMs(), Scheduling.nowMs() - startTime])
+      events.push([result, Scheduling.nowMs() - startTime])
     })
 
     tap.again()
-    setTimeout(tap.again, 80)
-    setTimeout(tap.again, 120)
+    setTimeout(tap.again, 250)
+    setTimeout(tap.again, 450)
 
     setTimeout(() => {
       expect(events.length).toEqual(2)
-      expectAverageAtTime(events[0], 80, 80)
-      expectAverageAtTime(events[1], 60, 120)
+      expectAverageAtTime(events[0], 250, 250)
+      expectAverageAtTime(events[1], 225, 450)
       done()
-    }, 250)
+    }, 475)
   })
 
   it('resets itself after some time and can be tapped again', (done) => {
@@ -27,29 +27,29 @@ describe('Tap', () => {
     let events = []
     let tap = Scheduling.Tap()
     tap.on('average', (result) => {
-      events.push([result.toMs(), Scheduling.nowMs() - startTime])
+      events.push([result, Scheduling.nowMs() - startTime])
     })
 
     tap.again()
-    setTimeout(tap.again, 100)
-    setTimeout(tap.again, 500)
-    setTimeout(tap.again, 650)
+    setTimeout(tap.again, 250)
     setTimeout(tap.again, 800)
+    setTimeout(tap.again, 1050)
+    setTimeout(tap.again, 1250)
 
     setTimeout(() => {
       expect(events.length).toEqual(3)
-      expectAverageAtTime(events[0], 100, 100)
-      expectAverageAtTime(events[1], 150, 650)
-      expectAverageAtTime(events[2], 150, 800)
+      expectAverageAtTime(events[0], 250, 250)
+      expectAverageAtTime(events[1], 250, 1050)
+      expectAverageAtTime(events[2], 225, 1250)
       done()
-    }, 850)
+    }, 1275)
   })
 })
 
 function expectAverageAtTime (event, expectedAverage, expectedAt) {
   if (typeof event === 'undefined') return fail('expected an event but was undefined')
   let tolerance = 10
-  let actualAverage = event[0]
+  let actualAverage = event[0].beatLength().toMs()
   let actualAt = event[1]
 
   if (isNaN(actualAverage) || (actualAverage < (expectedAverage - tolerance)) || (actualAverage > (expectedAverage + tolerance))) {
