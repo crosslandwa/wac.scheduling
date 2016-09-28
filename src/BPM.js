@@ -17,7 +17,7 @@ const toMs = (candidate) => (candidate && (typeof candidate.toMs === 'function')
 function BPM (initial) {
   EventEmitter.call(this)
   let bpm = this
-  let current = (typeof initial.current === 'function') ? initial.current() : sanitize(initial)
+  let current = (initial && (typeof initial.current === 'function')) ? initial.current() : sanitize(initial)
 
   function updateAndReport (newBpm) {
     current = sanitize(newBpm)
