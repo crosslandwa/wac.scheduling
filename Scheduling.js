@@ -73,7 +73,7 @@ function Scheduling (context) {
   this.Tap = function () { return new Tap(scheduling.nowMs, scheduling.inTheFuture) }
 
   this.BPM = function (initial) { return new BPM(initial) }
-  this.BPMForBeatLength = function (beatLength) { return BPM.forBeatLength() }
+  this.BPMForBeatLength = function (beatLength) { return BPM.forBeatLength(beatLength) }
 }
 
 function inTheFutureLoose (callback, when) {

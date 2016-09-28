@@ -54,6 +54,6 @@ describe('BPM module', () => {
   })
 
   it('can be created from a beat length in Ms', () => {
-    expect(Scheduling.BPMForBeatLength(500).current()).toEqual(120)
+    expect(Scheduling.BPMForBeatLength(1000).current()).toEqual(60)
   })
 })
