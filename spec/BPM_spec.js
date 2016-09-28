@@ -18,34 +18,34 @@ describe('BPM module', () => {
   })
 
   it('can have bpm increased', () => {
-    bpm.change_by(3)
+    bpm.changeBy(3)
     expect(emittedEvents).toEqual(['bpm=123'])
   })
 
   it('can have bpm decreased', () => {
-    bpm.change_by(-10)
+    bpm.changeBy(-10)
     expect(emittedEvents).toEqual(['bpm=110'])
   })
 
   it('can have bpm set', () => {
-    bpm.change_to(100)
+    bpm.changeTo(100)
     expect(emittedEvents).toEqual(['bpm=100'])
   })
 
   it('supports a max bpm of 300', () => {
-    bpm.change_by(500)
+    bpm.changeBy(500)
     expect(emittedEvents).toEqual(['bpm=300'])
   })
 
   it('supports a min bpm of 20', () => {
-    bpm.change_by(-500)
+    bpm.changeBy(-500)
     expect(emittedEvents).toEqual(['bpm=20'])
   })
 
   it('supports BPM specified up to 2dp', () => {
-    bpm.change_to(120.055)
+    bpm.changeTo(120.055)
     expect(emittedEvents).toEqual(['bpm=120.06'])
-    bpm.change_by(1.005)
+    bpm.changeBy(1.005)
     expect(emittedEvents).toEqual(['bpm=120.06', 'bpm=121.07'])
   })
 

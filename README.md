@@ -62,6 +62,21 @@ tap.on('average', (result) => { /* do something with result.toMs() */ }) // resu
 
 // the tap object will reset itself if tap.again() is not called for a period of time
 
+// -----BPM-----
+// a simple utility to represent BPM (beats per minute) to a max of 2 decimal places
+
+var bpm = Scheduling.BPM(); // bpm defaults to 120 beats per min
+var bpm = Scheduling.BPM(150); // bpm at 150 beats per min
+var bpm = Scheduling.BPMForBeatLength(1000); // bpm with beats of length 1000ms (i.e. 60bpm)
+
+bpm.on('changed', (bpm) => /* respond to changes in BPM */);
+
+bpm.changeTo(150); // change to 150 beats per min. Emits a 'changed' event
+bpm.changeBy(3); // increase/decrease bpm by given amount. Emits a 'changed' event
+bpm.current(); // returns current bpm, 153 in this case
+bpm.report(); // forces bpm to emit a 'changed' event
+
+bpm.beatLength(); // returns an object with a toMs() function that returns the current beat length in ms
 ```
 
 ## Tight or loose?
