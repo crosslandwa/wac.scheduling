@@ -7,7 +7,7 @@ const { clamp } = require('ramda')
 
 const between1And16 = clamp(1, 16)
 
-const forceToBPMObject = (bpm) => (bpm.beatLength === 'function') ? bpm : new BPM(bpm)
+const forceToBPMObject = (bpm) => (typeof bpm.beatLength === 'function') ? bpm : new BPM(bpm)
 
 function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
   EventEmitter.call(this)
@@ -70,6 +70,7 @@ function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
   }
 
   this.updateBPM = function (newBPM) {
+    console.log(newBPM, forceToBPMObject(newBPM))
     repeater.updateInterval(forceToBPMObject(newBPM).beatLength().toMs())
   }
 
