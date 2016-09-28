@@ -40,7 +40,7 @@ repeater.reportInterval(); // emits an 'interval' event
 // -----METRONOME-----
 // a simple metronome
 
-var metronome = Scheduling.Metronome(numberOfBeats, bpm) // specify an accent every 1-16 beats, and a BPM
+var metronome = Scheduling.Metronome(numberOfBeats, bpm) // specify an accent every 1-16 beats, and a BPM (as a number or a BPM instance)
 
 // metronome emits an event (either 'accent' or 'tick') every beat
 
@@ -48,7 +48,7 @@ metronome.on('accent', () => { /* occurs every Nth beat as specifided by numberO
 metronome.start() // start emitting events
 metronome.stop() // stop emitting events
 
-metronome.updateBPM(newBPM) // change how often events are emitted
+metronome.updateBPM(newBPM) // change how often events are emitted (specifying newBPM as a number or a BPM instance)
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
 
 metronome.suppressClick() // prevents the metronome's default click sounds from sounding
