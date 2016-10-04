@@ -79,8 +79,8 @@ describe('Metronome', () => {
       expect(events.length).toEqual(4)
       expectEventAtTime(events[0], 'accent', 0)
       expectEventAtTime(events[1], 'tick', 250)
-      expectEventAtTime(events[2], 'tick', 500) // next tick occurs when it would have
-      expectEventAtTime(events[3], 'tick', 1000) // subsequent ticks re-timed
+      expectEventAtTime(events[2], 'tick', 750) // expect BPM change to re-time next tick
+      expectEventAtTime(events[3], 'tick', 1250)
       done()
     }, 1300)
   })

@@ -25,7 +25,7 @@ describe('Repeater', () => {
     }, 150)
 
     setTimeout(function () {
-      expect(count).toEqual(4) // calls at 0, 100, 200, 400
+      expect(count).toEqual(3) // calls at 0, 100, 300, 500
       done()
     }, 450)
   })
