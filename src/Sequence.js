@@ -144,7 +144,7 @@ function Sequence (atATime, nowMs) {
   }
 
   this.load = function (json) {
-    sequence.stop() // TODO should we be able to carry on if new sequence loaded?
+    sequence.stop()
 
     events = json.events.map((event) => {
       let newEvent = mapEventForJSONification(event)

@@ -183,6 +183,30 @@ describe('Sequence', () => {
         done()
       }, 125)
     })
+
+    it('is automatically stopped when loaded from JSON', (done) => {
+      let events = []
+      capture(events, 'capture')
+      capture(events, 'stopped')
+
+      let sequence2 = Scheduling.Sequence()
+
+      sequence2.addEventAt(50, 'capture', 'hello1')
+
+      sequence.addEventAt(100, 'capture', 'hello2')
+      sequence.start()
+
+      sequence.load(sequence2.toJSON())
+      setTimeout(sequence.start, 50)
+
+      setTimeout(() => {
+        expect(events.length).toEqual(3)
+        expectEventAtTime(events[0], 'stopped', 0)
+        expectEventAtTime(events[1], 'capture', 100, 'hello1')
+        expectEventAtTime(events[2], 'stopped', 110) // expect stop to occur ~10ms after last event (for unlooped sequence)
+        done()
+      }, 125)
+    })
   })
 
   describe("that hasn't been started", () => {
