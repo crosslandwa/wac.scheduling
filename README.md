@@ -37,7 +37,7 @@ repeater.on('interval', (interval) => /* Take action when interval changes */);
  * The emitted interval object looks like:
  * { toMs: function, nextRepeatTime: { toMs: function } }
  * toMs gives the interval time (in milliseconds)
- * nextRepeatTime.toMs gives the absoliute (scheduled) time when the next repeat will occur (in milliseconds)
+ * nextRepeatTime.toMs gives the absolute (scheduled) time when the next repeat will occur (in milliseconds)
  *
  * note nextRepeatTime is omitted if the Repeater is not currently running
  */
@@ -61,6 +61,15 @@ metronome.updateBPM(newBPM) // change how often events are emitted (specifying n
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
 
 metronome.suppressClick() // prevents the metronome's default click sounds from sounding
+
+metronome.on('running', (nextTick) => { /* occurs when started */ }
+/*
+ * The emitted nextTick object looks like:
+ * { toMs: function }
+ * toMs gives the absolute (scheduled) time when the next tick will occur (in milliseconds)
+ */
+
+metronome.on('stopped', () => { /* occurs when stopped */ }
 
 // -----TAP-----
 // a simple tap tempo type utility

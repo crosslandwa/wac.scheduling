@@ -20,7 +20,7 @@ describe('Metronome', () => {
   let clockStartTime
 
   function capture (events, eventName) {
-    metronome.on(eventName, (data) => events.push([eventName, Scheduling.nowMs() - clockStartTime]))
+    metronome.on(eventName, (data) => events.push([eventName, Scheduling.nowMs() - clockStartTime, data]))
   }
 
   beforeEach(() => {
@@ -101,5 +101,35 @@ describe('Metronome', () => {
       expectEventAtTime(events[2], 'tick', 550)
       done()
     }, 600)
+  })
+
+  it('emits running and started events, and the next tick time is discoverable', (done) => {
+    let events = []
+    capture(events, 'stopped')
+    capture(events, 'running')
+
+    metronome.start()
+    setTimeout(() => metronome.stop(), 325)
+
+    setTimeout(() => {
+      expect(events.length).toEqual(1)
+      expectEventAtTime(events[0], 'running', 0)
+      let nextTickTime = events[0][2].toMs() - clockStartTime
+      expect(nextTickTime).not.toBeLessThan(250) // 4 beats per second
+      expect(nextTickTime).toBeLessThan(500)
+    }, 100)
+
+    setTimeout(() => {
+      expect(events.length).toEqual(1)
+      let nextTickTime = events[0][2].toMs() - clockStartTime
+      expect(nextTickTime).not.toBeLessThan(500) // 4 beats per second
+      expect(nextTickTime).toBeLessThan(750)
+    }, 300)
+
+    setTimeout(() => {
+      expect(events.length).toEqual(2)
+      expectEventAtTime(events[1], 'stopped', 325)
+      done()
+    }, 350)
   })
 })

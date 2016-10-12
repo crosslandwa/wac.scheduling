@@ -76,6 +76,14 @@ function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
     metronome.removeListener('tick', makeTickClick)
     return metronome
   }
+
+  repeater.on('interval', (event) => {
+    if (event.nextRepeatTime) {
+      metronome.emit('running', { toMs: () => event.nextRepeatTime.toMs() })
+    } else {
+      metronome.emit('stopped')
+    }
+  })
 }
 util.inherits(Metronome, EventEmitter)
 
