@@ -148,6 +148,9 @@ sequence.loop(loopLengthMs); // optional, sets a loop length and sequence will r
 sequence.start([offsetMs]); // starts emitting events [starting from a given offset if provided]
 sequence.stop(); // stops sequence, emits stopped event
 
+sequence.startAt(absoluteTime, [offsetMs]); // start the sequence at some absolute time (in the future) [starting from a given offset if provided]
+// note that absoluteTime can be a ms integer, or an object with a toMs() function
+
 sequence.reset(); // clears all events and loop length
 
 sequence.toJSON(); // returns a JSON representation of the sequence (that can be JSON stringified for storage)

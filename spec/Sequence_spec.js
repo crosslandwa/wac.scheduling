@@ -112,6 +112,24 @@ describe('Sequence', () => {
       }, 50)
     })
 
+    it('can be scheduled to start at some point in time (in the future), specified in ms', (done) => {
+      let events = []
+      capture(events, 'capture')
+      capture(events, 'stopped')
+
+      sequence.addEventAt(50, 'capture', 'hello1')
+      sequence.addEventAt(100, 'capture', 'hello2')
+      sequence.startAt(clockStartTime + 25)
+
+      setTimeout(() => {
+        expect(events.length).toEqual(3)
+        expectEventAtTime(events[0], 'capture', 75, 'hello1')
+        expectEventAtTime(events[1], 'capture', 125, 'hello2')
+        expectEventAtTime(events[2], 'stopped', 135) // 10ms after last event
+        done()
+      }, 150)
+    })
+
     it('stops immediately when started after the last event', (done) => {
       let events = []
       capture(events, 'capture')
@@ -315,6 +333,23 @@ describe('Sequence', () => {
         expectEventAtTime(events[1], 'capture', 75, 'hello2')
         done()
       }, 100)
+    })
+
+    it('can be scheduled to start at some point in time (in the future), specified in ms', (done) => {
+      let events = []
+      capture(events, 'capture')
+
+      sequence.addEventAt(50, 'capture', 'hello1')
+      sequence.addEventAt(100, 'capture', 'hello2')
+      sequence.loop(150).startAt({ toMs: () => clockStartTime + 25 })
+
+      setTimeout(() => {
+        expect(events.length).toEqual(3)
+        expectEventAtTime(events[0], 'capture', 75, 'hello1')
+        expectEventAtTime(events[1], 'capture', 125, 'hello2')
+        expectEventAtTime(events[2], 'capture', 225, 'hello1')
+        done()
+      }, 250)
     })
 
     it('responds to changes in loop length whilst playing', (done) => {

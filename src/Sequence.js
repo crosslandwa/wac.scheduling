@@ -2,6 +2,7 @@
 
 const EventEmitter = require('events')
 const util = require('util')
+const createInterval = require('./CreateInterval.js')
 
 function noAction () {}
 
@@ -61,16 +62,23 @@ function Sequence (atATime, nowMs) {
 
   let events = []
 
-  this.start = function (offsetMs) {
+  this.startAt = function (timeMs, offsetMs) {
+    timeMs = createInterval(timeMs).toMs()
     offsetMs = offsetMs > 0 ? offsetMs : 0
+    timeMs = timeMs > 0 ? timeMs : 0
+    timeMs = timeMs < nowMs() ? nowMs() : timeMs
     if (restartEvent.when) offsetMs = offsetMs % restartEvent.when
-    absoluteStartTime = nowMs() - offsetMs
+    absoluteStartTime = timeMs - offsetMs
     if (running) {
       cancelAllEvents()
     }
     running = true
     scheduleAllEvents(offsetMs)
     return sequence
+  }
+
+  this.start = function (offsetMs) {
+    sequence.startAt(nowMs(), offsetMs)
   }
 
   this.stop = function () {
