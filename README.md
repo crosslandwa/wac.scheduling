@@ -20,7 +20,7 @@ Scheduling.nowMs();
 //-----SCHEDULE AN EVENT AT AN ABSOLUTE TIME-----
 // pass a callback to occur at some exact point in time
 
-let when = Scheduling.nowMs() + 2000; // schedule 2s from now 
+let when = Scheduling.nowMs() + 2000; // schedule 2s from now
 Scheduling.atATime(() => { /* your callback */ }, when); // when must be either a number, or an object that implements .toMs() and returns a time expressed in milliseconds
 
 //-----REPEATING EVENTS-----
@@ -30,12 +30,21 @@ var repeater = Scheduling.Repeater(interval); // interval must be an object that
 
 repeater.start(myCallback); // calls myCallback immediately, then repeatedly until...
 repeater.stop(); // stops calling myCallback
-repeater.updateInterval(interval) // fluid method to update the repeat time. interval must have a .toMs() method. Returns the repeater instance 
+repeater.updateInterval(interval) // fluid method to update the repeat time. interval must have a .toMs() method. Returns the repeater instance
 
-repeater.on('interval', (interval) => /* Take action when interval changes. interval will have a .toMs() method */);
+repeater.on('interval', (interval) => /* Take action when interval changes */);
+/*
+ * The emitted interval object looks like:
+ * { toMs: function, nextRepeatTime: { toMs: function } }
+ * toMs gives the interval time (in milliseconds)
+ * nextRepeatTime.toMs gives the absoliute (scheduled) time when the next repeat will occur (in milliseconds)
+ *
+ * note nextRepeatTime is omitted if the Repeater is not currently running
+ */
+
 repeater.reportInterval(); // emits an 'interval' event
 
-// note that Repeater will handle being passed an integer interval and interpret it as a ms time 
+// note that Repeater will handle being passed an integer interval and interpret it as a ms time
 
 // -----METRONOME-----
 // a simple metronome
@@ -117,7 +126,7 @@ The sequence object provides the ability to schedule a (looping) series of event
 ```javascript
 const context = new window.AudioContext(),
     Scheduling = require('wac.scheduling')(context);
-    
+
 let sequence = Scheduling.Sequence(Scheduling);
 
 sequence.on(eventName, (eventData) => /* do stuff */);
@@ -135,7 +144,7 @@ sequence.reset(); // clears all events and loop length
 sequence.toJSON(); // returns a JSON representation of the sequence (that can be JSON stringified for storage)
 sequence.load(json); // stops the sequence (if running) and loads new events/loops specified in json
 
-sequence.scale(scaleFactor); // makes the events in the sequence and its loop length (if looping) longer/shorter 
+sequence.scale(scaleFactor); // makes the events in the sequence and its loop length (if looping) longer/shorter
 
 sequence.currentPositionMs(); // returns current position within loop in ms
 sequence.loopLengthMs(); // returns the loop length in ms (or undefined if the sequence is not looped)
@@ -145,7 +154,7 @@ sequence.loopLengthMs(); // returns the loop length in ms (or undefined if the s
 
 The addEventNow method has some slightly special behaviour
 
-```javascript    
+```javascript
 let sequence = Scheduling.Sequence(Scheduling);
 
 // sequence that is not running

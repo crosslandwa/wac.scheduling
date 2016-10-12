@@ -73,4 +73,17 @@ describe('Repeater', () => {
     repeater.updateInterval({ toMs: function () { return 200 } })
     expect(reportedInterval.toMs()).toEqual(200)
   })
+
+  it('reports the time of the next repeat when repeating', () => {
+    let startTime = Scheduling.nowMs()
+    let reportedInterval = 0
+    let repeater = Scheduling.Repeater(when100ms)
+    repeater.on('interval', (interval) => { reportedInterval = interval })
+    repeater.updateInterval({ toMs: function () { return 200 } })
+    expect(reportedInterval.nextRepeatTime).toBeUndefined()
+
+    repeater.start(() => {})
+    repeater.reportInterval()
+    expect(reportedInterval.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 200)
+  })
 })
