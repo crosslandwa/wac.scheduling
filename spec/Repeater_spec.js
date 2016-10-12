@@ -83,7 +83,9 @@ describe('Repeater', () => {
     expect(reportedInterval.nextRepeatTime).toBeUndefined()
 
     repeater.start(() => {})
-    repeater.reportInterval()
     expect(reportedInterval.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 200)
+
+    repeater.stop()
+    expect(reportedInterval.nextRepeatTime).toBeUndefined()
   })
 })
