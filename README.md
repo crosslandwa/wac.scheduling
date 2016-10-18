@@ -66,8 +66,9 @@ metronome.suppressClick() // prevents the metronome's default click sounds from 
 metronome.on('running', (nextTick) => { /* occurs when started */ }
 /*
  * The emitted nextTick object looks like:
- * { toMs: function }
- * toMs gives the absolute (scheduled) time when the next tick will occur (in milliseconds)
+ * { previousTick: { toMs: function }, nextTick: { toMs: function } }
+ * previousTick.toMs gives the absolute (scheduled) time of when the previous tick occurred (in milliseconds)
+ * nextTick.toMs gives the absolute (scheduled) time when the next tick will occur (in milliseconds)
  */
 
 metronome.on('stopped', () => { /* occurs when stopped */ }

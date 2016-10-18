@@ -79,7 +79,10 @@ function Metronome (Repeater, context, initialNumberOfBeats, initialBPM) {
 
   repeater.on('interval', (event) => {
     if (event.nextRepeatTime) {
-      metronome.emit('running', { toMs: () => event.nextRepeatTime.toMs() })
+      metronome.emit('running', {
+        previousTick: { toMs: event.previousRepeatTime.toMs },
+        nextTick: { toMs: event.nextRepeatTime.toMs }
+      })
     } else {
       metronome.emit('stopped')
     }

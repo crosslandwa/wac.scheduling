@@ -103,7 +103,7 @@ describe('Metronome', () => {
     }, 600)
   })
 
-  it('emits running and started events, and the next tick time is discoverable', (done) => {
+  it('emits running and started events, and the previous and next tick times are discoverable', (done) => {
     let events = []
     capture(events, 'stopped')
     capture(events, 'running')
@@ -114,14 +114,20 @@ describe('Metronome', () => {
     setTimeout(() => {
       expect(events.length).toEqual(1)
       expectEventAtTime(events[0], 'running', 0)
-      let nextTickTime = events[0][2].toMs() - clockStartTime
+      let previousTickTime = events[0][2].previousTick.toMs() - clockStartTime
+      expect(previousTickTime).not.toBeLessThan(0) // 4 beats per second
+      expect(previousTickTime).toBeLessThan(250)
+      let nextTickTime = events[0][2].nextTick.toMs() - clockStartTime
       expect(nextTickTime).not.toBeLessThan(250) // 4 beats per second
       expect(nextTickTime).toBeLessThan(500)
     }, 100)
 
     setTimeout(() => {
       expect(events.length).toEqual(1)
-      let nextTickTime = events[0][2].toMs() - clockStartTime
+      let previousTickTime = events[0][2].previousTick.toMs() - clockStartTime
+      expect(previousTickTime).not.toBeLessThan(250) // 4 beats per second
+      expect(previousTickTime).toBeLessThan(500)
+      let nextTickTime = events[0][2].nextTick.toMs() - clockStartTime
       expect(nextTickTime).not.toBeLessThan(500) // 4 beats per second
       expect(nextTickTime).toBeLessThan(750)
     }, 300)
