@@ -35,11 +35,12 @@ repeater.updateInterval(interval) // fluid method to update the repeat time. int
 repeater.on('interval', (interval) => /* Take action when interval changes */);
 /*
  * The emitted interval object looks like:
- * { toMs: function, nextRepeatTime: { toMs: function } }
+ * { toMs: function, nextRepeatTime: { toMs: function }, previousRepeatTime: { toMs: function } }
  * toMs gives the interval time (in milliseconds)
  * nextRepeatTime.toMs gives the absolute (scheduled) time when the next repeat will occur (in milliseconds)
+ * previousRepeatTime.toMs gives the absolute (scheduled) time of when the last repeat occurred (in milliseconds)
  *
- * note nextRepeatTime is omitted if the Repeater is not currently running
+ * note nextRepeatTime/previousRepeatTime are omitted if the Repeater is not currently running
  */
 
 repeater.reportInterval(); // emits an 'interval' event

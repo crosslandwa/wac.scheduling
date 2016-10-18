@@ -61,7 +61,10 @@ function Repeater (atATime, nowMs, initialInterval) {
 
   this.reportInterval = function () {
     let data = { toMs: _interval.toMs }
-    if (_isScheduling) data.nextRepeatTime = { toMs: () => nextRepeatTime().toMs() }
+    if (_isScheduling) {
+      data.previousRepeatTime = { toMs: () => _lastScheduledTimeMs }
+      data.nextRepeatTime = { toMs: () => nextRepeatTime().toMs() }
+    }
     repeater.emit('interval', data)
   }
 }
