@@ -43,16 +43,10 @@ function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
     repeater.updateInterval(bpmBeatLength(newBPM))
   }
 
-  repeater.on('interval', (event) => {
-    if (event.nextRepeatTime) {
-      metronome.emit('running', {
-        previousTick: { toMs: event.previousRepeatTime.toMs },
-        nextTick: { toMs: event.nextRepeatTime.toMs }
-      })
-    } else {
-      metronome.emit('stopped')
-    }
+  repeater.on('started', (info) => {
+    metronome.emit('running', { previousTick: info.previousRepeatTime, nextTick: info.nextRepeatTime })
   })
+  repeater.on('stopped', () => { metronome.emit('stopped') })
 }
 util.inherits(Metronome, EventEmitter)
 

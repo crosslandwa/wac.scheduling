@@ -37,8 +37,8 @@ repeater.on('stopped', () => /* Take action when repeating stops */);
 /*
  * On 'started' The emitted info object looks like:
  * { nextRepeatTime: { toMs: function }, previousRepeatTime: { toMs: function } }
- * nextRepeatTime.toMs gives the absolute (scheduled) time when the next repeat will occur (in milliseconds)
- * previousRepeatTime.toMs gives the absolute (scheduled) time of when the last repeat occurred (in milliseconds)
+ * nextRepeatTime.toMs() gives the absolute (scheduled) time when the next repeat will occur (in milliseconds)
+ * previousRepeatTime.toMs() gives the absolute (scheduled) time of when the last repeat occurred (in milliseconds)
  */
 
 repeater.updateInterval(interval) // fluid method to update the repeat time. interval must have a .toMs() method. Returns the repeater instance
@@ -62,12 +62,12 @@ metronome.stop() // stop emitting events
 metronome.updateBPM(newBPM) // change how often events are emitted (specifying newBPM as a number or a BPM instance)
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
 
-metronome.on('running', (nextTick) => { /* occurs when started */ }
+metronome.on('running', (info) => { /* occurs when started */ }
 /*
- * The emitted nextTick object looks like:
+ * The emitted info object looks like:
  * { previousTick: { toMs: function }, nextTick: { toMs: function } }
- * previousTick.toMs gives the absolute (scheduled) time of when the previous tick occurred (in milliseconds)
- * nextTick.toMs gives the absolute (scheduled) time when the next tick will occur (in milliseconds)
+ * previousTick.toMs() gives the absolute (scheduled) time of when the previous tick occurred (in milliseconds)
+ * nextTick.toMs() gives the absolute (scheduled) time when the next tick will occur (in milliseconds)
  */
 
 metronome.on('stopped', () => { /* occurs when stopped */ }
