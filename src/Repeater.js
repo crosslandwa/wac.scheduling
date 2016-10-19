@@ -47,7 +47,10 @@ function Repeater (atATime, nowMs, initialInterval) {
     _isScheduling = true
     _callback = passedCallback
     _callback()
-    repeater.reportInterval()
+    repeater.emit('started', {
+      previousRepeatTime: { toMs: () => _lastScheduledTimeMs },
+      nextRepeatTime: { toMs: () => nextRepeatTime().toMs() }
+    })
     _cancel = recursiveInTheFuture()
   }
 
@@ -56,16 +59,11 @@ function Repeater (atATime, nowMs, initialInterval) {
     _cancel = noAction
     _callback = noAction
     _isScheduling = false
-    repeater.reportInterval()
+    repeater.emit('stopped')
   }
 
   this.reportInterval = function () {
-    let data = { toMs: _interval.toMs }
-    if (_isScheduling) {
-      data.previousRepeatTime = { toMs: () => _lastScheduledTimeMs }
-      data.nextRepeatTime = { toMs: () => nextRepeatTime().toMs() }
-    }
-    repeater.emit('interval', data)
+    repeater.emit('interval', { toMs: _interval.toMs })
   }
 }
 util.inherits(Repeater, EventEmitter)

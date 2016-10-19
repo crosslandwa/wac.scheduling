@@ -30,19 +30,19 @@ var repeater = Scheduling.Repeater(interval); // interval must be an object that
 
 repeater.start(myCallback); // calls myCallback immediately, then repeatedly until...
 repeater.stop(); // stops calling myCallback
-repeater.updateInterval(interval) // fluid method to update the repeat time. interval must have a .toMs() method. Returns the repeater instance
 
-repeater.on('interval', (interval) => /* Take action when interval changes */);
+repeater.on('started', (info) => /* Take action when repeating starts */);
+repeater.on('stopped', () => /* Take action when repeating stops */);
+
 /*
- * The emitted interval object looks like:
- * { toMs: function, nextRepeatTime: { toMs: function }, previousRepeatTime: { toMs: function } }
- * toMs gives the interval time (in milliseconds)
+ * On 'started' The emitted info object looks like:
+ * { nextRepeatTime: { toMs: function }, previousRepeatTime: { toMs: function } }
  * nextRepeatTime.toMs gives the absolute (scheduled) time when the next repeat will occur (in milliseconds)
  * previousRepeatTime.toMs gives the absolute (scheduled) time of when the last repeat occurred (in milliseconds)
- *
- * note nextRepeatTime/previousRepeatTime are omitted if the Repeater is not currently running
  */
 
+repeater.updateInterval(interval) // fluid method to update the repeat time. interval must have a .toMs() method. Returns the repeater instance
+repeater.on('interval', (interval) => /* Take action when interval changes */); // interval.toMs() returns interval time in ms
 repeater.reportInterval(); // emits an 'interval' event
 
 // note that Repeater will handle being passed an integer interval and interpret it as a ms time

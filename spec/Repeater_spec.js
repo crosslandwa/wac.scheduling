@@ -76,26 +76,25 @@ describe('Repeater', () => {
 
   it('reports the time of the previous and next repeat when repeating', (done) => {
     let startTime = Scheduling.nowMs()
-    let reportedInterval = 0
-    let repeater = Scheduling.Repeater(when100ms)
-    repeater.on('interval', (interval) => { reportedInterval = interval })
-    repeater.updateInterval({ toMs: function () { return 200 } })
-    expect(reportedInterval.nextRepeatTime).toBeUndefined()
+    let runningInfo = 0
+    let repeater = Scheduling.Repeater(200)
+    repeater.on('started', (info) => { runningInfo = info })
+    repeater.on('stopped', (info) => { runningInfo = info })
 
     repeater.start(() => {})
 
-    expect(reportedInterval.previousRepeatTime.toMs()).not.toBeLessThan(startTime) // >=
-    expect(reportedInterval.previousRepeatTime.toMs()).toBeLessThan(startTime + 200)
+    expect(runningInfo.previousRepeatTime.toMs()).not.toBeLessThan(startTime) // >=
+    expect(runningInfo.previousRepeatTime.toMs()).toBeLessThan(startTime + 200)
 
-    expect(reportedInterval.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 200) // >=
+    expect(runningInfo.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 200) // >=
 
     setTimeout(() => {
-      expect(reportedInterval.previousRepeatTime.toMs()).not.toBeLessThan(startTime + 200) // >=
+      expect(runningInfo.previousRepeatTime.toMs()).not.toBeLessThan(startTime + 200) // >=
 
-      expect(reportedInterval.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 400) // >=
+      expect(runningInfo.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 400) // >=
 
       repeater.stop()
-      expect(reportedInterval.nextRepeatTime).toBeUndefined()
+      expect(runningInfo).toBeUndefined()
       done()
     }, 300)
   })
