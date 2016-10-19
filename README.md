@@ -54,13 +54,12 @@ var metronome = Scheduling.Metronome(numberOfBeats, bpm) // specify an accent ev
 // metronome emits an event (either 'accent' or 'tick') every beat
 
 metronome.on('accent', () => { /* occurs every Nth beat as specifided by numberOfBeats */ }
+metronome.on('tick', () => { /* occurs on other beats as specifided by numberOfBeats */ }
 metronome.start() // start emitting events
 metronome.stop() // stop emitting events
 
 metronome.updateBPM(newBPM) // change how often events are emitted (specifying newBPM as a number or a BPM instance)
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
-
-metronome.suppressClick() // prevents the metronome's default click sounds from sounding
 
 metronome.on('running', (nextTick) => { /* occurs when started */ }
 /*
