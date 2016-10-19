@@ -65,7 +65,7 @@ function Scheduling (context) {
   }
 
   this.Metronome = function (numberOfBeats, bpm) {
-    return new Metronome(scheduling.Repeater, context, numberOfBeats, bpm)
+    return new Metronome(scheduling.Repeater, numberOfBeats, bpm)
   }
 
   this.Tap = function () { return new Tap(scheduling.nowMs, scheduling.inTheFuture) }
