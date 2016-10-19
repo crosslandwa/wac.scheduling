@@ -103,17 +103,17 @@ describe('Metronome', () => {
     }, 600)
   })
 
-  it('emits running and started events, and the previous and next tick times are discoverable', (done) => {
+  it('emits started and started events, and the previous and next tick times are discoverable', (done) => {
     let events = []
     capture(events, 'stopped')
-    capture(events, 'running')
+    capture(events, 'started')
 
     metronome.start()
     setTimeout(() => metronome.stop(), 325)
 
     setTimeout(() => {
       expect(events.length).toEqual(1)
-      expectEventAtTime(events[0], 'running', 0)
+      expectEventAtTime(events[0], 'started', 0)
       let previousTickTime = events[0][2].previousTick.toMs() - clockStartTime
       expect(previousTickTime).not.toBeLessThan(0) // 4 beats per second
       expect(previousTickTime).toBeLessThan(250)

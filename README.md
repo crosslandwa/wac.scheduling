@@ -62,7 +62,7 @@ metronome.stop() // stop emitting events
 metronome.updateBPM(newBPM) // change how often events are emitted (specifying newBPM as a number or a BPM instance)
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
 
-metronome.on('running', (info) => { /* occurs when started */ }
+metronome.on('started', (info) => { /* occurs when started */ }
 /*
  * The emitted info object looks like:
  * { previousTick: { toMs: function }, nextTick: { toMs: function } }
