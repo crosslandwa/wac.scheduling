@@ -85,6 +85,27 @@ describe('Metronome', () => {
     }, 1300)
   })
 
+  it('is slaved to passed in BPM (object)', (done) => {
+    let bpm = Scheduling.BPM(240)
+    metronome = Scheduling.Metronome(4, bpm)
+
+    let events = []
+    capture(events, 'accent')
+    capture(events, 'tick')
+
+    metronome.start()
+    setTimeout(() => bpm.changeTo(120), 275)
+
+    setTimeout(() => {
+      expect(events.length).toEqual(4)
+      expectEventAtTime(events[0], 'accent', 0)
+      expectEventAtTime(events[1], 'tick', 250)
+      expectEventAtTime(events[2], 'tick', 750) // expect BPM change to re-time next tick
+      expectEventAtTime(events[3], 'tick', 1250)
+      done()
+    }, 1300)
+  })
+
   it('can be stopped and started', (done) => {
     let events = []
     capture(events, 'accent')
