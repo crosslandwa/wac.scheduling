@@ -106,6 +106,15 @@ describe('Metronome', () => {
     }, 1300)
   })
 
+  it('reports when its BPM is changed', () => {
+    let events = []
+    capture(events, 'bpmChanged')
+    metronome.updateBPM(100)
+    expect(events.length).toEqual(1)
+    let bpm = events[0][2]
+    expect(bpm.current()).toEqual(100)
+  })
+
   it('can be stopped and started', (done) => {
     let events = []
     capture(events, 'accent')

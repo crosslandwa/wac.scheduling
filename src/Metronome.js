@@ -41,6 +41,7 @@ function Metronome (Repeater, initialNumberOfBeats, bpm) {
 
   function updateRepeaterInterval (newBPM) {
     repeater.updateInterval(newBPM.beatLength())
+    metronome.emit('bpmChanged', newBPM)
   }
 
   repeater.on('started', (info) => {
