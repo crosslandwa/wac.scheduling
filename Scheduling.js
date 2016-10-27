@@ -65,6 +65,7 @@ function Scheduling (context) {
   }
 
   this.Metronome = function (numberOfBeats, bpm) {
+    bpm = (bpm instanceof BPM) ? bpm : new BPM(bpm)
     return new Metronome(scheduling.Repeater, numberOfBeats, bpm)
   }
 

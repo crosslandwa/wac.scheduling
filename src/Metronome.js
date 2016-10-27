@@ -6,13 +6,12 @@ const util = require('util')
 const { clamp } = require('ramda')
 
 const between1And16 = clamp(1, 16)
-const bpmBeatLength = (bpm) => new BPM(bpm).beatLength()
 
-function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
+function Metronome (Repeater, initialNumberOfBeats, bpm) {
   EventEmitter.call(this)
   let metronome = this
   let numberOfBeats = between1And16(initialNumberOfBeats)
-  let repeater = Repeater(bpmBeatLength(initialBPM))
+  let repeater = Repeater(bpm.beatLength())
   let count = -1
 
   function tick () {
@@ -40,7 +39,11 @@ function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
   }
 
   this.updateBPM = function (newBPM) {
-    repeater.updateInterval(bpmBeatLength(newBPM))
+    bpm.changeTo(newBPM)
+  }
+
+  function updateRepeaterInterval(newBPM) {
+    repeater.updateInterval(newBPM.beatLength())
   }
 
   repeater.on('started', (info) => {
@@ -48,9 +51,7 @@ function Metronome (Repeater, initialNumberOfBeats, initialBPM) {
   })
   repeater.on('stopped', () => { metronome.emit('stopped') })
 
-  if (initialBPM instanceof BPM) {
-    initialBPM.on('changed', metronome.updateBPM)
-  }
+  bpm.on('changed', updateRepeaterInterval)
 }
 util.inherits(Metronome, EventEmitter)
 
