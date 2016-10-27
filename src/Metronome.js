@@ -1,6 +1,5 @@
 'use strict'
 
-const BPM = require('./BPM.js')
 const EventEmitter = require('events')
 const util = require('util')
 const { clamp } = require('ramda')
@@ -33,16 +32,14 @@ function Metronome (Repeater, initialNumberOfBeats, bpm) {
   }
 
   this.updateNumberOfBeats = function (beats) {
-    if ((beats > 0) && (beats <= 16)) {
-      numberOfBeats = beats
-    }
+    numberOfBeats = (beats === between1And16(beats)) ? beats : numberOfBeats
   }
 
   this.updateBPM = function (newBPM) {
     bpm.changeTo(newBPM)
   }
 
-  function updateRepeaterInterval(newBPM) {
+  function updateRepeaterInterval (newBPM) {
     repeater.updateInterval(newBPM.beatLength())
   }
 
