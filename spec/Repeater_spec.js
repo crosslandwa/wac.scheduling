@@ -25,7 +25,7 @@ describe('Repeater', () => {
     }, 150)
 
     setTimeout(function () {
-      expect(count).toEqual(4) // calls at 0, 100, 200, 400
+      expect(count).toEqual(3) // calls at 0, 100, 300, 500
       done()
     }, 450)
   })
@@ -72,5 +72,30 @@ describe('Repeater', () => {
     repeater.on('interval', (interval) => { reportedInterval = interval })
     repeater.updateInterval({ toMs: function () { return 200 } })
     expect(reportedInterval.toMs()).toEqual(200)
+  })
+
+  it('reports the time of the previous and next repeat when repeating', (done) => {
+    let startTime = Scheduling.nowMs()
+    let runningInfo = 0
+    let repeater = Scheduling.Repeater(200)
+    repeater.on('started', (info) => { runningInfo = info })
+    repeater.on('stopped', (info) => { runningInfo = info })
+
+    repeater.start(() => {})
+
+    expect(runningInfo.previousRepeatTime.toMs()).not.toBeLessThan(startTime) // >=
+    expect(runningInfo.previousRepeatTime.toMs()).toBeLessThan(startTime + 200)
+
+    expect(runningInfo.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 200) // >=
+
+    setTimeout(() => {
+      expect(runningInfo.previousRepeatTime.toMs()).not.toBeLessThan(startTime + 200) // >=
+
+      expect(runningInfo.nextRepeatTime.toMs()).not.toBeLessThan(startTime + 400) // >=
+
+      repeater.stop()
+      expect(runningInfo).toBeUndefined()
+      done()
+    }, 300)
   })
 })

@@ -1,59 +1,16 @@
 'use strict'
 
-const EventEmitter = require('events')
-const util = require('util')
-
-function Repeater (atATime, nowMs, initialInterval) {
-  EventEmitter.call(this)
-
-  let lastScheduledTimeMs
-
-  let recursiveInTheFuture = function (callback) {
-    let nextScheduledTimeMs = lastScheduledTimeMs + _interval.toMs()
-    return atATime(() => {
-      if (_isScheduling) {
-        callback()
-        lastScheduledTimeMs = nextScheduledTimeMs
-        _cancel = recursiveInTheFuture(callback)
-      }
-    }, nextScheduledTimeMs)
-  }
-
-  let _isScheduling = false
-  let _interval = createInterval(initialInterval)
-  let _cancel = noAction
-  let repeater = this
-
-  this.updateInterval = function (newInterval) {
-    _interval = createInterval(newInterval)
-    repeater.reportInterval()
-    return repeater
-  }
-
-  this.start = function (callback) {
-    if (_isScheduling) return
-    _isScheduling = true
-    callback()
-    lastScheduledTimeMs = nowMs()
-    _cancel = recursiveInTheFuture(callback)
-  }
-
-  this.stop = function () {
-    _isScheduling = false
-    _cancel()
-    _cancel = noAction
-  }
-
-  this.reportInterval = function () {
-    repeater.emit('interval', _interval)
-  }
-}
-util.inherits(Repeater, EventEmitter)
+const BPM = require('./src/BPM.js')
+const createInterval = require('./src/CreateInterval.js')
+const Metronome = require('./src/Metronome.js')
+const Repeater = require('./src/Repeater.js')
+const Sequence = require('./src/Sequence.js')
+const Tap = require('./src/TapTempo.js')
 
 function Scheduling (context) {
   let scheduling = this
 
-  let inTheFutureTight = function (callback, when) {
+  function inTheFutureTight (callback, when) {
     let source = context.createBufferSource()
     let now = context.currentTime
     let thousandth = context.sampleRate / 1000
@@ -71,7 +28,7 @@ function Scheduling (context) {
     }
   }
 
-  let atATimeTight = function (callback, when) {
+  function atATimeTight (callback, when) {
     let source = context.createBufferSource()
     let thousandth = context.sampleRate / 1000
     let scheduledAt = (createInterval(when).toMs() / 1000) - 0.001
@@ -89,7 +46,7 @@ function Scheduling (context) {
     }
   }
 
-  let nowMsFromContext = function () {
+  function nowMsFromContext () {
     return context.currentTime * 1000
   }
 
@@ -102,6 +59,20 @@ function Scheduling (context) {
   this.Repeater = function (initialInterval) {
     return new Repeater(scheduling.atATime, scheduling.nowMs, initialInterval)
   }
+
+  this.Sequence = function () {
+    return new Sequence(scheduling.atATime, scheduling.nowMs)
+  }
+
+  this.Metronome = function (numberOfBeats, bpm) {
+    bpm = (bpm instanceof BPM) ? bpm : new BPM(bpm)
+    return new Metronome(scheduling.Repeater, numberOfBeats, bpm)
+  }
+
+  this.Tap = function () { return new Tap(scheduling.nowMs, scheduling.inTheFuture) }
+
+  this.BPM = function (initial) { return new BPM(initial) }
+  this.BPMForBeatLength = function (beatLength) { return BPM.forBeatLength(beatLength) }
 }
 
 function inTheFutureLoose (callback, when) {
@@ -116,12 +87,6 @@ function atATimeLoose (callback, when) {
 
 function nowMsFromSystem () {
   return new Date().getTime()
-}
-
-function noAction () {}
-
-function createInterval (candidate) {
-  return (candidate && (typeof candidate.toMs === 'function')) ? candidate : { toMs: function () { return candidate } }
 }
 
 module.exports = function (context) { return new Scheduling(context) }
