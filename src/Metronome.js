@@ -33,16 +33,29 @@ function Metronome (Repeater, initialNumberOfBeats, bpm) {
 
   this.updateNumberOfBeats = function (beats) {
     numberOfBeats = (beats === between1And16(beats)) ? beats : numberOfBeats
-    metronome.emit('numberOfBeats', numberOfBeats)
+    reportBeats()
   }
 
   this.updateBPM = function (newBPM) {
     bpm.changeTo(newBPM)
   }
 
+  this.report = function () {
+    reportBPM()
+    reportBeats()
+  }
+
   function updateRepeaterInterval (newBPM) {
     repeater.updateInterval(newBPM.beatLength())
-    metronome.emit('bpmChanged', newBPM)
+    reportBPM()
+  }
+
+  function reportBeats () {
+    metronome.emit('numberOfBeats', numberOfBeats)
+  }
+
+  function reportBPM () {
+    metronome.emit('bpmChanged', bpm)
   }
 
   repeater.on('started', (info) => {

@@ -183,4 +183,16 @@ describe('Metronome', () => {
       done()
     }, 350)
   })
+
+  it('reports current number of beats and bpm on request', () => {
+    let events = []
+    capture(events, 'numberOfBeats')
+    capture(events, 'bpmChanged')
+
+    metronome.report()
+    expect(events[0][0]).toEqual('bpmChanged')
+    expect(events[0][2].current()).toEqual(240)
+    expect(events[1][0]).toEqual('numberOfBeats')
+    expect(events[1][2]).toEqual(4)
+  })
 })
