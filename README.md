@@ -63,6 +63,7 @@ metronome.updateBPM(newBPM) // change how often events are emitted (specifying n
 metronome.on('bpmChanged', (bpm) => { /* occurs when bpmChanged */ } // bpm is a BPM instance
 
 metronome.updateNumberOfBeats(beats) // change how often the 'accent' event is emitted vs the 'tick' event
+metronome.on('numberOfBeats', (beats) => { /* reports the current number of beats */ }
 
 metronome.on('started', (info) => { /* occurs when started */ }
 /*

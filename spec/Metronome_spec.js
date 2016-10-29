@@ -67,6 +67,21 @@ describe('Metronome', () => {
     }, 1600)
   })
 
+  it('restricts number of beats between 1 and 16, and reports number of beats', () => {
+    let events = []
+    capture(events, 'numberOfBeats')
+
+    metronome.updateNumberOfBeats(10)
+    metronome.updateNumberOfBeats(5)
+    metronome.updateNumberOfBeats(-1)
+    metronome.updateNumberOfBeats(20)
+
+    expect(events[0][2]).toEqual(10)
+    expect(events[1][2]).toEqual(5)
+    expect(events[2][2]).toEqual(5)
+    expect(events[3][2]).toEqual(5)
+  })
+
   it('can have bpm changed', (done) => {
     let events = []
     capture(events, 'accent')

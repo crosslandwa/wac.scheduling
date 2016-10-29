@@ -33,6 +33,7 @@ function Metronome (Repeater, initialNumberOfBeats, bpm) {
 
   this.updateNumberOfBeats = function (beats) {
     numberOfBeats = (beats === between1And16(beats)) ? beats : numberOfBeats
+    metronome.emit('numberOfBeats', numberOfBeats)
   }
 
   this.updateBPM = function (newBPM) {
