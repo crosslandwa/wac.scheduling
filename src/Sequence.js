@@ -151,6 +151,8 @@ function Sequence (atATime, nowMs) {
     return sequence
   }
 
+  // Removed from README for now as internal JSON representation may change - USE AT OWN RISK!
+  // sequence.load(json); // stops the sequence (if running) and loads new events/loops specified in JSON
   this.load = function (json) {
     sequence.stop()
 
@@ -166,6 +168,8 @@ function Sequence (atATime, nowMs) {
     return sequence
   }
 
+  // Removed from README for now as internal JSON representation may change - USE AT OWN RISK!
+  // sequence.toJSON(); // returns a JSON representation of the sequence (that can be JSON stringified for storage)
   this.toJSON = function () {
     return {
       loop: { lengthMs: restartEvent.when },

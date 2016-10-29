@@ -159,9 +159,6 @@ sequence.startAt(absoluteTime, [offsetMs]); // start the sequence at some absolu
 
 sequence.reset(); // clears all events and loop length
 
-sequence.toJSON(); // returns a JSON representation of the sequence (that can be JSON stringified for storage)
-sequence.load(json); // stops the sequence (if running) and loads new events/loops specified in json
-
 sequence.scale(scaleFactor); // makes the events in the sequence and its loop length (if looping) longer/shorter
 
 sequence.currentPositionMs(); // returns current position within loop in ms
