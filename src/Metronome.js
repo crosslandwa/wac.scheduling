@@ -2,9 +2,11 @@
 
 const EventEmitter = require('events')
 const util = require('util')
-const { clamp } = require('ramda')
 
-const between1And16 = clamp(1, 16)
+const between1And16 = (x) => {
+  if (x < 1) return 1
+  return Math.min(x, 16)
+}
 
 function Metronome (Repeater, initialNumberOfBeats, bpm) {
   EventEmitter.call(this)
