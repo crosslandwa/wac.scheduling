@@ -1,6 +1,6 @@
 {
   "name": "wac.scheduling",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "main": "Scheduling.js",
   "description": "Utilities for scheduling (audio) events in a Web Audio API based app",
   "keywords": [
@@ -8,9 +8,7 @@
     "timing",
     "sequencing"
   ],
-  "dependencies": {
-    "ramda": "^0.22.1 "
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-preset-es2015": "6.9.0",
     "eslint": "^2.8.0",
